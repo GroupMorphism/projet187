@@ -115,6 +115,15 @@ CREATE DOMAIN Adresse_type
 ---------------------
 --Creation des tables
 ---------------------
+CREATE TABLE Recette
+  -- Répertoire des capteurs.
+(
+  noSerieR NoRecette NOT NULL, -- Un numero de série attribué à une recette pour le différencier
+  Auteur   TEXT      NOT NULL, -- Nom de l’auteur de la recette
+
+  CONSTRAINT Recette_cc0 PRIMARY KEY (noSerieR)
+);
+
 CREATE TABLE Cuvee
   -- Répertoire des Cuvee.
 (
@@ -128,18 +137,6 @@ CREATE TABLE Cuvee
   CONSTRAINT Cuvee_fc0 FOREIGN KEY (idRecette) REFERENCES Recette(noSerieR)
 );
 
-CREATE TABLE Equipement
-  -- Répertoire des equipements.
-(
-  noSerieE    NoSerie_id       NOT NULL, -- Un numero de série attribué à un équipement pour le différencier
-  description TEXT             NOT NULL, -- Description de l’équipement
-  idSousEtape Cuvee_id         NOT NULL, -- Identifiant de la sous-étape où l'équipement est utilisé
-  modeleEq    Modele_equip_id  NOT NULL, -- Numéro du modèle de l'équipement utilisé
-
-  CONSTRAINT Equipement_cc0 PRIMARY KEY (noSerieE),
-  CONSTRAINT Equipement_fc0 FOREIGN KEY (idSousEtape) REFERENCES S_etapeCuvee(id_setapecuvee),
-  CONSTRAINT Equipement_fc1 FOREIGN KEY (modeleEq) REFERENCES EquipementType(modele_equip)
-);
 
 CREATE TABLE EquipementType
   -- Répertoire des types d'equipements.
@@ -148,17 +145,6 @@ CREATE TABLE EquipementType
   description  TEXT            NOT NULL, -- Description du type de l’équipement
 
   CONSTRAINT EquipementType_cc0 PRIMARY KEY (modele_equip)
-);
-
-CREATE TABLE Capteur
-  -- Répertoire des capteurs.
-(
-  noSerieC    Capteur_id   NOT NULL, -- Un numero de série attribué à un capteur pour le différencier
-  description TEXT         NOT NULL, -- Description du capteur
-  typeCapteur Capteur_Type NOT NULL, -- Le type de capteur utilisé
-
-  CONSTRAINT Capteur_cc0 PRIMARY KEY (noSerieC),
-  CONSTRAINT Capteur_fc0 FOREIGN KEY (typeCapteur) REFERENCES CapteurType(noModele)
 );
 
 CREATE TABLE CapteurType
@@ -170,13 +156,15 @@ CREATE TABLE CapteurType
   CONSTRAINT CapteurType_cc0 PRIMARY KEY (noModele)
 );
 
-CREATE TABLE Recette
+CREATE TABLE Capteur
   -- Répertoire des capteurs.
 (
-  noSerieR NoRecette NOT NULL, -- Un numero de série attribué à une recette pour le différencier
-  Auteur   TEXT      NOT NULL, -- Nom de l’auteur de la recette
+  noSerieC    Capteur_id   NOT NULL, -- Un numero de série attribué à un capteur pour le différencier
+  description TEXT         NOT NULL, -- Description du capteur
+  typeCapteur Capteur_Type NOT NULL, -- Le type de capteur utilisé
 
-  CONSTRAINT Recette_cc0 PRIMARY KEY (noSerieR)
+  CONSTRAINT Capteur_cc0 PRIMARY KEY (noSerieC),
+  CONSTRAINT Capteur_fc0 FOREIGN KEY (typeCapteur) REFERENCES CapteurType(noModele)
 );
 
 CREATE TABLE Etape
@@ -229,6 +217,19 @@ CREATE TABLE S_etapeCuvee
   CONSTRAINT S_etapeCuvee_fc1 FOREIGN KEY (idEtapeCuvee) REFERENCES EtapeCuvee(id_etapecuvee)
 );
 
+CREATE TABLE Equipement
+  -- Répertoire des equipements.
+(
+  noSerieE    NoSerie_id       NOT NULL, -- Un numero de série attribué à un équipement pour le différencier
+  description TEXT             NOT NULL, -- Description de l’équipement
+  idSousEtape Cuvee_id         NOT NULL, -- Identifiant de la sous-étape où l'équipement est utilisé
+  modeleEq    Modele_equip_id  NOT NULL, -- Numéro du modèle de l'équipement utilisé
+
+  CONSTRAINT Equipement_cc0 PRIMARY KEY (noSerieE),
+  CONSTRAINT Equipement_fc0 FOREIGN KEY (idSousEtape) REFERENCES S_etapeCuvee(id_setapecuvee),
+  CONSTRAINT Equipement_fc1 FOREIGN KEY (modeleEq) REFERENCES EquipementType(modele_equip)
+);
+
 --TODO: Table de jointures
 CREATE TABLE Action
   -- Répertoire des actions.
@@ -253,9 +254,9 @@ CREATE TABLE ActionCuvee
   id_setapecuvee Cuvee_id  NOT NULL, -- La sous-étape ayant utilisée cette action
   idAction       Action_id NOT NULL, -- Le type d'action
 
-  CONSTRAINT Action_cc0 PRIMARY KEY (idActionCuvee),
-  CONSTRAINT Action_fc0 FOREIGN KEY (id_setapecuvee) REFERENCES S_etapeCuvee(id_setapecuvee),
-  CONSTRAINT Action_fc1 FOREIGN KEY (idAction) REFERENCES Action(idAction)
+  CONSTRAINT ActionCuvee_cc0 PRIMARY KEY (idActionCuvee),
+  CONSTRAINT ActionCuvee_fc0 FOREIGN KEY (id_setapecuvee) REFERENCES S_etapeCuvee(id_setapecuvee),
+  CONSTRAINT ActionCuvee_fc1 FOREIGN KEY (idAction) REFERENCES Action(idAction)
 );
 
 CREATE TABLE MesureType
@@ -281,6 +282,15 @@ CREATE TABLE MesureRe
   CONSTRAINT MesureRe_fc0 FOREIGN KEY (idMesureType) REFERENCES MesureType(idMesure)
 );
 
+CREATE TABLE Ingredient
+  -- Répertoire des Ingredients.
+(
+  idIngredient Ingredient_id NOT NULL, --L’identifiant unique pour un ingrédient
+  nom          nom_type      NOT NULL, -- Le nom de l’ingrédient
+
+  CONSTRAINT Ingredient_cc0 PRIMARY KEY (idIngredient)
+);
+
 CREATE TABLE AlimentRe
   -- Répertoire des mesures daliments.
 (
@@ -297,7 +307,7 @@ CREATE TABLE AutreRe
   idAction     Action_id   NOT NULL, -- L'identifiant de cette action
   description  TEXT        NOT NULL, -- La description d’une autre action pour une recette
 
-  CONSTRAINT AlimentRe_cc0 PRIMARY KEY (idAction)
+  CONSTRAINT AutreRe_cc0 PRIMARY KEY (idAction)
 );
 
 CREATE TABLE MesureCu
@@ -307,6 +317,30 @@ CREATE TABLE MesureCu
   valeur     FLOAT      NOT NULL, -- La valeur d’une mesure prise dans une cuvée
 
   CONSTRAINT MesureCu_cc0 PRIMARY KEY (idMesure)
+);
+
+CREATE TABLE Fournisseur
+  -- Répertoire des fournisseurs.
+(
+  idFournisseur Fournisseur_id NOT NULL, --L’identifiant unique pour un produit
+  adresse       Adresse_type   NOT NULL, -- Le numéro de lot d’un produit
+  nom           Nom_type       NOT NULL, -- La quantité utilisé d’un produit
+
+  CONSTRAINT Fournisseur_cc0 PRIMARY KEY (idFournisseur)
+);
+
+CREATE TABLE Produit
+  -- Répertoire des produits.
+(
+  idProduit     Ingredient_id  NOT NULL, -- L’identifiant unique pour un produit
+  noLot         NoLot_type     NOT NULL, -- Le numéro de lot d’un produit
+  quantite      FLOAT          NOT NULL, -- La quantité utilisé d’un produit
+  idIngredient  Ingredient_id  NOT NULL, -- L'identifiant de l'ingrédient utilisé pour ce produit
+  idFournisseur Fournisseur_id NOT NULL, -- L'identifiant du fournisseur pour ce produit
+
+  CONSTRAINT Produit_cc0 PRIMARY KEY (idProduit),
+  CONSTRAINT Produit_fc0 FOREIGN KEY (idIngredient) REFERENCES Ingredient(idIngredient),
+  CONSTRAINT Produit_fc1 FOREIGN KEY (idFournisseur) REFERENCES Fournisseur(idFournisseur)
 );
 
 CREATE TABLE AlimentCu
@@ -326,37 +360,4 @@ CREATE TABLE AutreCu
   statut     TEXT        NOT NULL, -- Le statut d’une autre action dans une cuvée
 
   CONSTRAINT AutreCu_cc0 PRIMARY KEY (idAction)
-);
-
-CREATE TABLE Ingredient
-  -- Répertoire des Ingredients.
-(
-  idIngredient Ingredient_id NOT NULL, --L’identifiant unique pour un ingrédient
-  nom          nom_type      NOT NULL, -- Le nom de l’ingrédient
-
-  CONSTRAINT Ingredient_cc0 PRIMARY KEY (idIngredient)
-);
-
-CREATE TABLE Produit
-  -- Répertoire des produits.
-(
-  idProduit     Ingredient_id  NOT NULL, -- L’identifiant unique pour un produit
-  noLot         NoLot_type     NOT NULL, -- Le numéro de lot d’un produit
-  quantite      FLOAT          NOT NULL, -- La quantité utilisé d’un produit
-  idIngredient  Ingredient_id  NOT NULL, -- L'identifiant de l'ingrédient utilisé pour ce produit
-  idFournisseur Fournisseur_id NOT NULL, -- L'identifiant du fournisseur pour ce produit
-
-  CONSTRAINT Produit_cc0 PRIMARY KEY (idProduit),
-  CONSTRAINT Produit_fc0 FOREIGN KEY (idIngredient) REFERENCES Ingredient(idIngredient),
-  CONSTRAINT Produit_fc1 FOREIGN KEY (idFournisseur) REFERENCES Fournisseur(idFournisseur)
-);
-
-CREATE TABLE Fournisseur
-  -- Répertoire des fournisseurs.
-(
-  idFournisseur Fournisseur_id NOT NULL, --L’identifiant unique pour un produit
-  adresse       Adresse_type   NOT NULL, -- Le numéro de lot d’un produit
-  nom           Nom_type       NOT NULL, -- La quantité utilisé d’un produit
-
-  CONSTRAINT Fournisseur_cc0 PRIMARY KEY (idFournisseur)
 );
