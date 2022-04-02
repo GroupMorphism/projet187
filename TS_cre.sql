@@ -361,3 +361,60 @@ CREATE TABLE AutreCu
 
   CONSTRAINT AutreCu_cc0 PRIMARY KEY (idAction)
 );
+
+---------------------------
+-- Tables de jointures
+---------------------------
+CREATE TABLE MesureActionRe
+(
+    idMesure   Mesure_id   NOT NULL, -- Identifiant de la mesure
+    idAction   Action_id   NOT NULL, -- Identifiant de l'action qui prend cette mesure
+
+    CONSTRAINT MesureActionRe_fc0 FOREIGN KEY (idMesure) REFERENCES MesureRe(idMesure),
+    CONSTRAINT MesureActionRe_fc1 FOREIGN KEY (idAction) REFERENCES Action(idAction)
+);
+
+CREATE TABLE AlimentActionRe
+(
+    idAliment  Ingredient_id  NOT NULL, -- Identifiant de l'aliment
+    idAction   Action_id      NOT NULL, -- Identifiant de l'action qui utilise cet aliment
+
+    CONSTRAINT AlimentActionRe_fc0 FOREIGN KEY (idAliment) REFERENCES AlimentRe(idAliment),
+    CONSTRAINT AlimentActionRe_fc1 FOREIGN KEY (idAction) REFERENCES Action(idAction)
+);
+
+CREATE TABLE AutreActionRe
+(
+    idAutreAct  Action_id   NOT NULL, -- Identifiant d'un type d'action
+    idAction    Action_id   NOT NULL, -- Identifiant de l'action qui utilise ce type d'Action
+
+    CONSTRAINT AutreActionRe_fc0 FOREIGN KEY (idAutreAct) REFERENCES AutreRe(idAction),
+    CONSTRAINT AutreActionRe_fc1 FOREIGN KEY (idAction) REFERENCES Action(idAction)
+);
+
+CREATE TABLE MesureActionCu
+(
+    idMesure   Mesure_id   NOT NULL, -- Identifiant de la mesure
+    idAction   Action_id   NOT NULL, -- Identifiant de l'action qui prend cette mesure
+
+    CONSTRAINT MesureActionCu_fc0 FOREIGN KEY (idMesure) REFERENCES MesureCu(idMesure),
+    CONSTRAINT MesureActionCu_fc1 FOREIGN KEY (idAction) REFERENCES ActionCuvee(idActionCuvee)
+);
+
+CREATE TABLE AlimentActionCu
+(
+    idAliment  Ingredient_id  NOT NULL, -- Identifiant de l'aliment
+    idAction   Action_id      NOT NULL, -- Identifiant de l'action qui utilise cet aliment
+
+    CONSTRAINT AlimentActionCu_fc0 FOREIGN KEY (idAliment) REFERENCES AlimentCu(idAliment),
+    CONSTRAINT AlimentActionCu_fc1 FOREIGN KEY (idAction) REFERENCES ActionCuvee(idActionCuvee)
+);
+
+CREATE TABLE AutreActionCu
+(
+    idAutreAct  Action_id   NOT NULL, -- Identifiant d'un type d'action
+    idAction    Action_id   NOT NULL, -- Identifiant de l'action qui utilise ce type d'Action
+
+    CONSTRAINT AutreActionCu_fc0 FOREIGN KEY (idAutreAct) REFERENCES AutreCu(idAction),
+    CONSTRAINT AutreActionCu_fc1 FOREIGN KEY (idAction) REFERENCES ActionCuvee(idActionCuvee)
+);

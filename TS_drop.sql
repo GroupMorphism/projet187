@@ -1,4 +1,6 @@
+-- Tables
 DROP TABLE Action CASCADE;
+DROP TABLE ActionCuvee CASCADE;
 DROP TABLE AlimentCu CASCADE;
 DROP TABLE AlimentRe CASCADE;
 DROP TABLE AutreCu CASCADE;
@@ -20,6 +22,17 @@ DROP TABLE Recette CASCADE;
 DROP TABLE S_etape CASCADE;
 DROP TABLE s_etapecuvee CASCADE;
 
+-- Tables de jointures
+DROP TABLE MesureActionRe CASCADE;
+DROP TABLE AlimentActionRe CASCADE;
+DROP TABLE AutreActionRe CASCADE;
+DROP TABLE MesureActionCu CASCADE;
+DROP TABLE AlimentActionCu CASCADE;
+DROP TABLE AutreActionCu CASCADE;
+
+
+
+-- Types
 DROP DOMAIN Action_id CASCADE;
 DROP DOMAIN Adresse_type CASCADE;
 DROP DOMAIN capteur_id CASCADE;
