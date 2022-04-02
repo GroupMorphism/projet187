@@ -90,8 +90,7 @@ CREATE DOMAIN Ingredient_id
 CREATE DOMAIN nom_type
   -- id_modele d'equipement
   -- Choix découlant des exigences.
-  TEXT
-  CHECK (VALUE SIMILAR TO '[A-Z]{4}');
+  VARCHAR(70);
 
 CREATE DOMAIN NoLot_type
   -- id_modele d'equipement
@@ -230,7 +229,6 @@ CREATE TABLE Equipement
   CONSTRAINT Equipement_fc1 FOREIGN KEY (modeleEq) REFERENCES EquipementType(modele_equip)
 );
 
---TODO: Table de jointures
 CREATE TABLE Action
   -- Répertoire des actions.
 (
@@ -244,7 +242,6 @@ CREATE TABLE Action
   CONSTRAINT Action_fc0 FOREIGN KEY (id_setape) REFERENCES S_etape(id_setape)
 );
 
---TODO: Table de jointures
 CREATE TABLE ActionCuvee
   -- Répertoire des actions de la cuvee.
 (
@@ -292,7 +289,7 @@ CREATE TABLE Ingredient
 );
 
 CREATE TABLE AlimentRe
-  -- Répertoire des mesures daliments.
+  -- Répertoire des mesures d'aliments.
 (
   idAliment   Ingredient_id  NOT NULL, -- L'identifiant de l'aliment utilisé
   quantite    FLOAT          NOT NULL, --La quantité utilisée d’un aliment dans une recette
