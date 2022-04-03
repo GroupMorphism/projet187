@@ -44,14 +44,45 @@ CREATE OR REPLACE PROCEDURE CreerEtape
     (idE etape_id, descr text, idR norecette)
     LANGUAGE SQL AS
 $$
-    INSERT INTO etape (idetape, description, idrecette) VALUES
+    INSERT INTO recetteetape (idetape, description, idrecette) VALUES
     (idE, descr, idR)
 $$;
 
--- Obtenir le fabriquant F d'un équipement
-
--- Obtenir une mesure M pour un capteur C dans un équipement E
+-- Obtenir les mesures M pour un capteur C dans un équipement E
+CREATE OR REPLACE FUNCTION ObtenirMesures
+    (idCapt capteur_id)
+    RETURNS DOUBLE PRECISION
+LANGUAGE SQL AS
+$$
+    SELECT mesurecu.valeur
+    FROM capteur JOIN capteurspourequipement USING (noseriec)
+                 JOIN equipement USING (noseriee)
+                 JOIN s_etapecuvee ON equipement.idsousetape = s_etapecuvee.id_setapecuvee
+                 JOIN actioncuvee USING (id_setapecuvee)
+                 JOIN mesureactioncu ON actioncuvee.idactioncuvee = mesureactioncu.idaction
+                 JOIN mesurecu USING (idmesure)
+    WHERE (capteur.noseriec = idCapt)
+$$;
 
 -- Obtenir le fournisseur F pour un ingrédient I
+CREATE OR REPLACE FUNCTION ObtenirFournisseur
+    (idIngr ingredient_id)
+    RETURNS fournisseur_id
+LANGUAGE SQL AS
+$$
+    SELECT fournisseur.idfournisseur
+    FROM ingredient JOIN produit USING (idingredient)
+                    JOIN fournisseur USING (idfournisseur)
+    WHERE (ingredient.idingredient = idIngr)
+$$;
 
 -- Obtenir toutes les actions A pour une sous-étape S.
+CREATE OR REPLACE FUNCTION ObtenirActions
+    (idS etape_id)
+    RETURNS action_id
+LANGUAGE SQL AS
+$$
+    SELECT action.idaction
+    FROM s_etape JOIN action USING (id_setape)
+    WHERE (s_etape.id_setape = idS)
+$$;

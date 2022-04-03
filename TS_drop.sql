@@ -21,6 +21,7 @@ DROP TABLE Produit CASCADE;
 DROP TABLE Recette CASCADE;
 DROP TABLE S_etape CASCADE;
 DROP TABLE s_etapecuvee CASCADE;
+DROP TABLE CapteursPourEquipement CASCADE;
 
 -- Tables de jointures
 DROP TABLE MesureActionRe CASCADE;

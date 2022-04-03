@@ -229,6 +229,15 @@ CREATE TABLE Equipement
   CONSTRAINT Equipement_fc1 FOREIGN KEY (modeleEq) REFERENCES EquipementType(modele_equip)
 );
 
+CREATE TABLE CapteursPourEquipement
+(
+    noSerieE   NoSerie_id     NOT NULL, -- Le numéro de série de l'équipement
+    noSerieC   Capteur_id     NOT NULL, -- Le numéro de série du capteur
+
+    CONSTRAINT CapteursPourEquipement_fc0 FOREIGN KEY (noSerieE) REFERENCES Equipement(noSerieE),
+    CONSTRAINT CapteursPourEquipement_fc1 FOREIGN KEY (noSerieC) REFERENCES Capteur(noSerieC)
+);
+
 CREATE TABLE Action
   -- Répertoire des actions.
 (
