@@ -75,14 +75,3 @@ $$
                     JOIN fournisseur USING (idfournisseur)
     WHERE (ingredient.idingredient = idIngr)
 $$;
-
--- Obtenir toutes les actions A pour une sous-étape S.
-CREATE OR REPLACE FUNCTION ObtenirActions
-    (idS etape_id)
-    RETURNS action_id
-LANGUAGE SQL AS
-$$
-    SELECT action.idaction
-    FROM s_etape JOIN action USING (id_setape)
-    WHERE (s_etape.id_setape = idS)
-$$;
