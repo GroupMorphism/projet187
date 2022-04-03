@@ -33,6 +33,22 @@ CREATE TRIGGER Inserer_Etape_tri
     INSTEAD OF INSERT ON RecetteEtape
     FOR EACH ROW EXECUTE PROCEDURE Inserer_Etape();
 
+-- Trigger sur la suppression d'une recette
+CREATE TRIGGER Supprimer_Etape_tri
+    BEFORE DELETE ON recette
+    FOR EACH ROW EXECUTE PROCEDURE Supprimer_Etape();
+
+-- Trigger sur la suppression d'une recette
+CREATE TRIGGER Supprimer_SEtape_tri
+    BEFORE DELETE ON etape
+    FOR EACH ROW EXECUTE PROCEDURE Supprimer_SEtape();
+
+-- Trigger sur la suppression d'une recette
+CREATE TRIGGER Supprimer_Action_tri
+    BEFORE DELETE ON s_etape
+    FOR EACH ROW EXECUTE PROCEDURE Supprimer_Action();
+
+
 
 ----------------------------
 --      FCT_TRIGGERS      --
@@ -56,3 +72,69 @@ $$
        RETURN NEW;
     END;
 $$;
+
+-- Supprimer une étape
+CREATE OR REPLACE FUNCTION Supprimer_Etape ()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql AS
+$$
+    BEGIN
+        IF New.noserier IS NULL THEN
+            DELETE FROM etape
+            WHERE Old.noserier = etape.idrecette;
+
+            RETURN Old;
+        END IF;
+        RETURN Old;
+    END;
+$$;
+
+-- Supprimer une sous-étape
+CREATE OR REPLACE FUNCTION Supprimer_SEtape ()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql AS
+$$
+    BEGIN
+        IF New.idetape IS NULL THEN
+            DELETE FROM s_etape
+            WHERE Old.idetape = s_etape.idetape;
+
+            RETURN Old;
+        END IF;
+        RETURN Old;
+    END;
+$$;
+
+-- Supprimer une acton
+CREATE OR REPLACE FUNCTION Supprimer_Action ()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql AS
+$$
+    BEGIN
+        IF New.id_setape IS NULL THEN
+            DELETE FROM action
+            WHERE Old.id_setape = action.id_setape;
+
+            RETURN Old;
+        END IF;
+        RETURN Old;
+    END;
+$$;
+
+
+
+INSERT INTO recette (noserier, auteur) VALUES
+('JKLM', 'Moimeme');
+
+INSERT INTO etape (idetape, description, idrecette) VALUES
+('CVBN', 'une cool etape', 'JKLM');
+
+INSERT INTO s_etape (id_setape, description, idetape) VALUES
+('ASDF', 'ma sous-etpae', 'CVBN');
+
+INSERT INTO action (idaction, duree, debut, description, id_setape) VALUES
+('GHJK', current_date::timestamp, current_date::timestamp, 'mon action', 'ASDF');
+
+
+DELETE FROM recette
+WHERE noserier = 'JKLM';
