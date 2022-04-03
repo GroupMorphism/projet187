@@ -75,3 +75,12 @@ $$
                     JOIN fournisseur USING (idfournisseur)
     WHERE (ingredient.idingredient = idIngr)
 $$;
+
+-- Supprimer une recette
+CREATE OR REPLACE PROCEDURE DeleteRecipe
+    (idR norecette)
+    LANGUAGE SQL AS
+$$
+    DELETE FROM recette
+    WHERE noserier = idR
+$$;

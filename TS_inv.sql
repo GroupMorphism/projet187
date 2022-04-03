@@ -120,21 +120,3 @@ $$
         RETURN Old;
     END;
 $$;
-
-
-
-INSERT INTO recette (noserier, auteur) VALUES
-('JKLM', 'Moimeme');
-
-INSERT INTO etape (idetape, description, idrecette) VALUES
-('CVBN', 'une cool etape', 'JKLM');
-
-INSERT INTO s_etape (id_setape, description, idetape) VALUES
-('ASDF', 'ma sous-etpae', 'CVBN');
-
-INSERT INTO action (idaction, duree, debut, description, id_setape) VALUES
-('GHJK', current_date::timestamp, current_date::timestamp, 'mon action', 'ASDF');
-
-
-DELETE FROM recette
-WHERE noserier = 'JKLM';
