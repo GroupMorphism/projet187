@@ -1,4 +1,4 @@
---obtenir les mesure dépensant le seuil cible
+--obtenir les mesure dépassant le seuil cible
 
 --obtenir les mesues dans l'intervalle d'alerte
 

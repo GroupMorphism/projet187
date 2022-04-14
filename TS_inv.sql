@@ -33,6 +33,7 @@ CREATE TRIGGER Inserer_Etape_tri
     INSTEAD OF INSERT ON RecetteEtape
     FOR EACH ROW EXECUTE PROCEDURE Inserer_Etape();
 
+
 -- Trigger sur la suppression d'une recette
 CREATE TRIGGER Supprimer_Etape_tri
     BEFORE DELETE ON recette
@@ -91,7 +92,6 @@ $$
        RETURN NEW;
     END;
 $$;
-
 
 -- Supprimer une étape
 CREATE OR REPLACE FUNCTION Supprimer_Etape ()
@@ -212,6 +212,4 @@ $$
     END;
 $$
 
-
--- Trigger sur l'insertion d'un équipement pour update table de jointure
 -- Trigger sur l'insertion des types d'actions pour update les tables de jointures associées

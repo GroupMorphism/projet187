@@ -193,20 +193,27 @@ $$;
 
 -- Ajout d'une mesureRe
 CREATE OR REPLACE PROCEDURE CreerMesureRecette
-    (idM mesure_id, freq frequencetype, seuil seuiltype, intervalleAl double precision, idMtype mesure_id)
+    (idM mesure_id, freq frequencetype, seuil seuiltype, intervalleAl double precision, idMtype mesure_id,
+     idAct action_id)
     LANGUAGE SQL AS
 $$
     INSERT INTO mesurere (idmesure, frequence, seuilcible, intervallealerte, idmesuretype) VALUES
-    (idM, freq, seuil, intervalleAl, idMtype)
+    (idM, freq, seuil, intervalleAl, idMtype);
+
+    INSERT INTO mesureactionre (idmesure, idaction) VALUES
+    (idM, idAct)
 $$;
 
 -- Ajout d'une mesureCu
 CREATE OR REPLACE PROCEDURE CreerMesureCuvée
-    (idM mesure_id, val double precision)
+    (idM mesure_id, val double precision, idAct action_id)
     LANGUAGE SQL AS
 $$
     INSERT INTO mesurecu (idmesure, valeur) VALUES
-    (idM, val)
+    (idM, val);
+
+    INSERT INTO mesureactioncu (idmesure, idaction) VALUES
+    (idM, idAct)
 $$;
 
 -- Ajout d'une mesure type
@@ -238,20 +245,50 @@ $$;
 
 -- Ajout d'un alimentRe
 CREATE OR REPLACE PROCEDURE CreerAlimentRecette
-    (idAl fournisseur_id, _quantite double precision)
+    (idAl fournisseur_id, _quantite double precision, idAct action_id)
     LANGUAGE SQL AS
 $$
     INSERT INTO alimentre (idaliment, quantite) VALUES
-    (idAl, _quantite)
+    (idAl, _quantite);
+
+    INSERT INTO alimentactionre (idaliment, idaction) VALUES
+    (idAl, idAct)
 $$;
 
 -- Ajout d'un alimentCu
 CREATE OR REPLACE PROCEDURE CreerAlimentCuvee
-    (idAl fournisseur_id, _statut text)
+    (idAl fournisseur_id, _statut text, idAct action_id)
     LANGUAGE SQL AS
 $$
     INSERT INTO alimentcu (idaliment, statut) VALUES
-    (idAl, _statut)
+    (idAl, _statut);
+
+    INSERT INTO alimentactioncu (idaliment, idaction) VALUES
+    (idAl, idAct)
+$$;
+
+-- Ajout d'un autre type d'action de recette
+CREATE OR REPLACE PROCEDURE CreerAutreActionRe
+    (idAutreAc action_id, descr text, idAc action_id)
+    LANGUAGE SQL AS
+$$
+    INSERT INTO autrere (idaction, description) VALUES
+    (idAutreAc, descr);
+
+    INSERT INTO autreactionre (idautreact, idaction) VALUES
+    (idAutreAc, idAc)
+$$;
+
+-- Ajout d'un autre type d'action de cuvée
+CREATE OR REPLACE PROCEDURE CreerAutreActionCu
+    (idAutreAc action_id, _statut text, idAc action_id)
+    LANGUAGE SQL AS
+$$
+    INSERT INTO autrecu (idaction, statut) VALUES
+    (idAc, _statut);
+
+    INSERT INTO autreactioncu (idautreact, idaction) VALUES
+    (idAutreAc, idAc)
 $$;
 
 
