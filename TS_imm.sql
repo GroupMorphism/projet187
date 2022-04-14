@@ -30,33 +30,6 @@ FROM IngrRecette
     WHERE NoRecette = idR;
 $$;
 
--- Ajouter une nouvelle recette
-CREATE OR REPLACE PROCEDURE CreerRecette
-    (idR norecette, aut nom_type)
-    LANGUAGE SQL AS
-$$
-    INSERT INTO recette (noserier, auteur) VALUES
-    (idR, aut)
-$$;
-
--- Ajouter une nouvelle étape
-CREATE OR REPLACE PROCEDURE CreerEtape
-    (idE etape_id, descr text, idR norecette)
-    LANGUAGE SQL AS
-$$
-    INSERT INTO recetteetape (idetape, description, idrecette) VALUES
-    (idE, descr, idR)
-$$;
-
--- Ajouter une nouvelle étape de cuvée
-CREATE OR REPLACE PROCEDURE CreerEtapeCuvée
-    (idEC cuvee_id, _debut timestamp, _fin timestamp, idE etape_id, idC cuvee_id)
-    LANGUAGE SQL AS
-$$
-    INSERT INTO etapecuvee (id_etapecuvee, debut, fin, idetape, idcuvee) VALUES
-    (idEC, _debut, _fin, idE, idC)
-$$;
-
 -- Obtenir les mesures M pour un capteur C dans un équipement E
 CREATE OR REPLACE FUNCTION ObtenirMesures
     (idCapt capteur_id)
@@ -116,6 +89,36 @@ $$
     WHERE (idetape = idE)
 $$;
 
+-------------------------------------
+--     Fonctions d'insertion       --
+-------------------------------------
+
+-- Ajouter une nouvelle recette
+CREATE OR REPLACE PROCEDURE CreerRecette
+    (idR norecette, aut nom_type)
+    LANGUAGE SQL AS
+$$
+    INSERT INTO recette (noserier, auteur) VALUES
+    (idR, aut)
+$$;
+
+-- Ajouter une nouvelle étape
+CREATE OR REPLACE PROCEDURE CreerEtape
+    (idE etape_id, descr text, idR norecette)
+    LANGUAGE SQL AS
+$$
+    INSERT INTO recetteetape (idetape, description, idrecette) VALUES
+    (idE, descr, idR)
+$$;
+
+-- Ajouter une nouvelle étape de cuvée
+CREATE OR REPLACE PROCEDURE CreerEtapeCuvée
+    (idEC cuvee_id, _debut timestamp, _fin timestamp, idE etape_id, idC cuvee_id)
+    LANGUAGE SQL AS
+$$
+    INSERT INTO etapecuvee (id_etapecuvee, debut, fin, idetape, idcuvee) VALUES
+    (idEC, _debut, _fin, idE, idC)
+$$;
 -- Ajout d'un équipement
 CREATE OR REPLACE PROCEDURE CreerEquipement
     (nSerie noserie_id, descr text, idSE cuvee_id, modele modele_equip_id)
@@ -172,7 +175,7 @@ $$;
 
 -- Ajout d'une action
 CREATE OR REPLACE PROCEDURE CreerAction
-    (idA action_id, _duree timestamp, _debut timestamp, descr text, idSE etape_id)
+    (idA action_id, _duree double precision, _debut timestamp, descr text, idSE etape_id)
     LANGUAGE SQL AS
 $$
     INSERT INTO action (idaction, duree, debut, description, id_setape) VALUES
@@ -251,5 +254,43 @@ $$
     (idAl, _statut)
 $$;
 
---MISE À JOUR
--- Changer une mesure
+
+--------------------------------------
+-- Insertion dans table de jointure --
+--------------------------------------
+
+-- Association d'un capteur à un équipement
+CREATE OR REPLACE PROCEDURE AddCapteurToEquip
+    (idCap capteur_id, noSerieEqu noserie_id)
+    LANGUAGE SQL AS
+$$
+    INSERT INTO capteurspourequipement (noseriee, noseriec) VALUES
+    (idCap, noSerieEqu)
+$$;
+
+-- Trigger pour vérifier la liaison d'un capteur et d'un équipement
+CREATE TRIGGER Ajout_Capteur_Equipement_tri
+    BEFORE INSERT ON capteurspourequipement
+    FOR EACH ROW EXECUTE PROCEDURE InsertionCaptEquiValide();
+
+-- Lance une exception si la liaison est invalide
+CREATE OR REPLACE FUNCTION InsertionCaptEquiValide ()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql AS
+$$
+    BEGIN
+        IF NOT EXISTS (
+            SELECT * FROM capteur
+            WHERE New.noseriec = capteur.noseriec
+            )
+            THEN RAISE EXCEPTION 'Id de capteur invaldie';
+        end if;
+
+        IF NOT EXISTS(
+            SELECT * FROM equipement
+            WHERE New.noseriee = equipement.noseriee
+            )
+            THEN RAISE EXCEPTION 'Le numero de serie est invalide';
+        end if;
+    END;
+$$

@@ -240,11 +240,11 @@ CREATE TABLE CapteursPourEquipement
 CREATE TABLE Action
   -- Répertoire des actions.
 (
-  idAction    Action_id NOT NULL, -- Identifiant unique de l’action
-  duree       TIMESTAMP NOT NULL, -- La durée de l’action
-  debut       TIMESTAMP NOT NULL, -- Le temps de début de l'action
-  description TEXT      NOT NULL, -- La description de l’action
-  id_setape   Etape_id  NOT NULL, -- La sous-étape utilisant cette action
+  idAction    Action_id         NOT NULL, -- Identifiant unique de l’action
+  duree       DOUBLE PRECISION  NOT NULL, -- La durée de l’action
+  debut       TIMESTAMP         NOT NULL, -- Le temps de début de l'action
+  description TEXT              NOT NULL, -- La description de l’action
+  id_setape   Etape_id          NOT NULL, -- La sous-étape utilisant cette action
 
   CONSTRAINT Action_cc0 PRIMARY KEY (idAction),
   CONSTRAINT Action_fc0 FOREIGN KEY (id_setape) REFERENCES S_etape(id_setape)

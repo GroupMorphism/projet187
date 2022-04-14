@@ -93,6 +93,7 @@ $$
     END;
 $$;
 
+
 -- Supprimer une étape
 CREATE OR REPLACE FUNCTION Supprimer_Etape ()
     RETURNS TRIGGER
@@ -196,7 +197,7 @@ $$
     END;
 $$
 
--- Supprimer un aliment
+-- Supprimer un autre type d'action
 CREATE OR REPLACE FUNCTION Supprimer_AutreAction()
     RETURNS TRIGGER
     LANGUAGE  plpgsql AS

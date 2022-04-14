@@ -21,17 +21,15 @@ DROP TABLE Produit CASCADE;
 DROP TABLE Recette CASCADE;
 DROP TABLE S_etape CASCADE;
 DROP TABLE s_etapecuvee CASCADE;
-DROP TABLE CapteursPourEquipement CASCADE;
 
 -- Tables de jointures
+DROP TABLE CapteursPourEquipement CASCADE;
 DROP TABLE MesureActionRe CASCADE;
 DROP TABLE AlimentActionRe CASCADE;
 DROP TABLE AutreActionRe CASCADE;
 DROP TABLE MesureActionCu CASCADE;
 DROP TABLE AlimentActionCu CASCADE;
 DROP TABLE AutreActionCu CASCADE;
-
-
 
 -- Types
 DROP DOMAIN Action_id CASCADE;
@@ -52,3 +50,5 @@ DROP DOMAIN noserie_id CASCADE;
 DROP DOMAIN responsable_id CASCADE;
 DROP DOMAIN seuiltype CASCADE;
 DROP DOMAIN unitetype CASCADE;
+
+-- Triggers
