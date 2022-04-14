@@ -38,12 +38,12 @@ CREATE TRIGGER Supprimer_Etape_tri
     BEFORE DELETE ON recette
     FOR EACH ROW EXECUTE PROCEDURE Supprimer_Etape();
 
--- Trigger sur la suppression d'une recette
+-- Trigger sur la suppression d'une étape
 CREATE TRIGGER Supprimer_SEtape_tri
     BEFORE DELETE ON etape
     FOR EACH ROW EXECUTE PROCEDURE Supprimer_SEtape();
 
--- Trigger sur la suppression d'une recette
+-- Trigger sur la suppression d'une sous-étape
 CREATE TRIGGER Supprimer_Action_tri
     BEFORE DELETE ON s_etape
     FOR EACH ROW EXECUTE PROCEDURE Supprimer_Action();
@@ -85,7 +85,6 @@ $$
             WHERE recette.noserier = NEW.idrecette
            ) THEN
            RAISE EXCEPTION 'Id de recette non existente';
-           RETURN NULL;
        END IF;
        INSERT INTO etape (idetape, description, idrecette) VALUES
         (NEW.idetape, NEW.description, NEW.idrecette);

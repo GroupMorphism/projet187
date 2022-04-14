@@ -50,5 +50,3 @@ DROP DOMAIN noserie_id CASCADE;
 DROP DOMAIN responsable_id CASCADE;
 DROP DOMAIN seuiltype CASCADE;
 DROP DOMAIN unitetype CASCADE;
-
--- Triggers
