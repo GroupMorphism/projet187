@@ -28,87 +28,86 @@ CREATE DOMAIN Modele_equip_id
   CHECK (VALUE SIMILAR TO '[A-Z]{4}');
 
 CREATE DOMAIN Capteur_id
-  -- id_modele d'equipement
+  -- id_capteur
   -- Choix découlant des exigences.
   TEXT
   CHECK (VALUE SIMILAR TO '[A-Z]{4}');
 
 CREATE DOMAIN Capteur_Type
-  -- id_modele d'equipement
+  -- id_capteur type
   -- Choix découlant des exigences.
   TEXT
   CHECK (VALUE SIMILAR TO '[A-Z]{4}');
 
 CREATE DOMAIN NoRecette
-  -- id_modele d'equipement
+  -- numéro d'une recette
   -- Choix découlant des exigences.
   TEXT
   CHECK (VALUE SIMILAR TO '[A-Z]{4}');
 
 CREATE DOMAIN Etape_id
-  -- id_modele d'equipement
+  -- id_étape
   -- Choix découlant des exigences.
   TEXT
   CHECK (VALUE SIMILAR TO '[A-Z]{4}');
 
 CREATE DOMAIN Action_id
-  -- id_modele d'equipement
+  -- id_action
   -- Choix découlant des exigences.
   TEXT
   CHECK (VALUE SIMILAR TO '[A-Z]{4}');
 
 CREATE DOMAIN Mesure_id
-  -- id_modele d'equipement
+  -- id_mesure
   -- Choix découlant des exigences.
   TEXT
   CHECK (VALUE SIMILAR TO '[A-Z]{4}');
 
 CREATE DOMAIN UniteType
-  -- id_modele d'equipement
+  -- type d'unité
   -- Choix découlant des exigences.
   TEXT
   CHECK (VALUE SIMILAR TO '[A-Z]{4}');
 
 CREATE DOMAIN frequenceType
-  -- id_modele d'equipement
+  -- type de fréquence
   -- Choix découlant des exigences.
   TEXT
   CHECK (VALUE SIMILAR TO '[A-Z]{4}');
 
 CREATE DOMAIN seuilType
-  -- id_modele d'equipement
+  -- type de seuil
   -- Choix découlant des exigences.
   TEXT
   CHECK (VALUE SIMILAR TO '[A-Z]{4}');
 
 CREATE DOMAIN Ingredient_id
-  -- id_modele d'equipement
+  -- id_ingrédient
   -- Choix découlant des exigences.
   TEXT
   CHECK (VALUE SIMILAR TO '[A-Z]{4}');
 
 CREATE DOMAIN nom_type
-  -- id_modele d'equipement
+  -- un nom
   -- Choix découlant des exigences.
   VARCHAR(70);
 
 CREATE DOMAIN NoLot_type
-  -- id_modele d'equipement
+  -- type d'un numéro de lot
   -- Choix découlant des exigences.
   TEXT
   CHECK (VALUE SIMILAR TO '[A-Z]{4}');
 
 CREATE DOMAIN Fournisseur_id
-  -- id_modele d'equipement
+  -- id_fournisseur
   -- Choix découlant des exigences.
   TEXT
   CHECK (VALUE SIMILAR TO '[A-Z]{4}');
 
 CREATE DOMAIN Adresse_type
-  -- id_modele d'equipement
+  -- type d'adresse
   -- Choix découlant des exigences.
-  TEXT
-  CHECK (VALUE SIMILAR TO '[A-Z]{4}');
+  VARCHAR(100);
 
 
 ---------------------

@@ -48,6 +48,26 @@ CREATE TRIGGER Supprimer_Action_tri
     BEFORE DELETE ON s_etape
     FOR EACH ROW EXECUTE PROCEDURE Supprimer_Action();
 
+-- Trigger sur la suppresion d'une action
+CREATE TRIGGER Supprimer_TypeActions_tri
+    BEFORE DELETE ON action
+    FOR EACH ROW EXECUTE PROCEDURE Supprimer_TypeAction();
+
+-- Trigger sur la suppresion d'une mesure
+CREATE TRIGGER Supprimer_MesureRe_tri
+    BEFORE DELETE ON mesureactionre
+    FOR EACH ROW EXECUTE PROCEDURE Supprimer_Mesure();
+
+-- Trigger sur la suppresion d'une mesure
+CREATE TRIGGER Supprimer_AlimentRe_tri
+    BEFORE DELETE ON alimentactionre
+    FOR EACH ROW EXECUTE PROCEDURE Supprimer_Aliment();
+
+-- Trigger sur la suppresion d'une autre action
+CREATE TRIGGER Supprimer_MesureRe_tri
+    BEFORE DELETE ON autreactionre
+    FOR EACH ROW EXECUTE PROCEDURE Supprimer_AutreAction();
+
 
 
 ----------------------------
@@ -105,7 +125,7 @@ $$
     END;
 $$;
 
--- Supprimer une acton
+-- Supprimer une action
 CREATE OR REPLACE FUNCTION Supprimer_Action ()
     RETURNS TRIGGER
     LANGUAGE plpgsql AS
@@ -120,3 +140,78 @@ $$
         RETURN Old;
     END;
 $$;
+
+-- Supprimer un type d'action
+CREATE OR REPLACE FUNCTION Supprimer_TypeAction ()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql AS
+$$
+    BEGIN
+        IF New.idaction IS NULL THEN
+            DELETE FROM mesureactionre
+            WHERE Old.idaction = mesureactionre.idaction;
+
+            DELETE FROM alimentactionre
+            WHERE Old.idaction = alimentactionre.idaction;
+
+            DELETE FROM autreactionre
+            WHERE Old.idaction = autreactionre.idaction;
+
+            RETURN Old;
+
+        END IF;
+        RETURN Old;
+    END;
+$$;
+
+-- Supprimer une mesure
+CREATE OR REPLACE FUNCTION Supprimer_Mesure()
+    RETURNS TRIGGER
+    LANGUAGE  plpgsql AS
+$$
+    BEGIN
+        IF New.idaction IS NULL THEN
+            DELETE FROM mesurere
+            WHERE Old.idmesure = mesurere.idmesure;
+
+            RETURN Old;
+        END IF;
+        RETURN Old;
+    END;
+$$;
+
+-- Supprimer un aliment
+CREATE OR REPLACE FUNCTION Supprimer_Aliment()
+    RETURNS TRIGGER
+    LANGUAGE  plpgsql AS
+$$
+    BEGIN
+        IF New.idaction IS NULL THEN
+            DELETE FROM alimentre
+            WHERE Old.idaliment = alimentre.idaliment;
+
+            RETURN Old;
+        END IF;
+        RETURN Old;
+    END;
+$$
+
+-- Supprimer un aliment
+CREATE OR REPLACE FUNCTION Supprimer_AutreAction()
+    RETURNS TRIGGER
+    LANGUAGE  plpgsql AS
+$$
+    BEGIN
+        IF New.idaction IS NULL THEN
+            DELETE FROM autreactionre
+            WHERE Old.idautreact = autreactionre.idaction;
+
+            RETURN Old;
+        END IF;
+        RETURN Old;
+    END;
+$$
+
+
+-- Trigger sur l'insertion d'un équipement pour update table de jointure
+-- Trigger sur l'insertion des types d'actions pour update les tables de jointures associées
